@@ -1,6 +1,3 @@
-// BSIT Phase 2 Proficiency Exam Reviewer — Question Bank
-// Polytechnic Institute of Tabaco
-// Combined data bank: Phase 2 Reviewer + Ultimate Master Edition
 
 const TOPICS = [
   { id: 'all', label: 'All topics' },
