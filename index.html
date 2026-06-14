@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BSIT Phase 2 Reviewer | Polytechnic Institute of Tabaco</title>
+<meta name="description" content="Interactive quiz reviewer for the BSIT Proficiency Exam (Phase 2) - Polytechnic Institute of Tabaco">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <h1>BSIT Phase 2 Reviewer</h1>
+      <p class="subtitle">Polytechnic Institute of Tabaco &middot; Proficiency Exam Reviewer</p>
+    </div>
+    <button id="themeToggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <span id="themeIcon">🌙</span>
+    </button>
+  </header>
+
+  <!-- HOME / SETUP SCREEN -->
+  <section id="screen-home" class="screen active">
+
+    <div class="card intro-card">
+      <p>Choose a topic, pick a mode, and test what you know. Track your high scores and try to beat your best!</p>
+    </div>
+
+    <div class="card">
+      <h2>1. Choose a topic</h2>
+      <div class="topic-grid" id="topicGrid"><!-- injected --></div>
+    </div>
+
+    <div class="card">
+      <h2>2. Choose a mode</h2>
+      <div class="mode-grid">
+        <button class="mode-card" data-mode="quiz">
+          <span class="mode-icon">📝</span>
+          <span class="mode-title">Quiz mode</span>
+          <span class="mode-desc">Answer multiple choice questions with instant feedback</span>
+        </button>
+        <button class="mode-card" data-mode="timed">
+          <span class="mode-icon">⏱️</span>
+          <span class="mode-title">Timed challenge</span>
+          <span class="mode-desc">60 seconds, answer as many as you can correctly</span>
+        </button>
+        <button class="mode-card" data-mode="flash">
+          <span class="mode-icon">🃏</span>
+          <span class="mode-title">Flashcards</span>
+          <span class="mode-desc">Flip through key concepts to memorize before the exam</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card" id="orderCard">
+      <h2>3. Question order</h2>
+      <div class="toggle-row">
+        <button class="toggle-btn active" id="btnSeq" data-order="seq">Sequential</button>
+        <button class="toggle-btn" id="btnShuffle" data-order="shuffle">Shuffled</button>
+      </div>
+    </div>
+
+    <button class="primary-btn start-btn" id="startBtn">Start review</button>
+
+    <div class="card highscore-card" id="highscoreCard">
+      <h2>🏆 High scores</h2>
+      <div id="highscoreList" class="highscore-list"><!-- injected --></div>
+      <button class="text-btn" id="clearScores">Clear high scores</button>
+    </div>
+
+  </section>
+
+  <!-- QUIZ / TIMED SCREEN -->
+  <section id="screen-quiz" class="screen">
+    <div class="quiz-topbar">
+      <button class="icon-btn" id="quitBtn" aria-label="Quit to home" title="Quit">✕</button>
+      <div class="pbar-wrap"><div class="pbar" id="pbar"></div></div>
+      <div id="timerDisplay" class="timer-display" style="display:none;">60s</div>
+    </div>
+
+    <div class="card quiz-card">
+      <div class="quiz-meta">
+        <span class="topic-tag" id="quizTopicTag"></span>
+        <span class="quiz-progress" id="quizProgress"></span>
+      </div>
+      <div class="qtext" id="qtext"></div>
+      <pre class="codeblock" id="codeblock" style="display:none;"></pre>
+      <div class="choices" id="choices"><!-- injected --></div>
+      <div class="exp" id="exp"></div>
+    </div>
+
+    <div class="navrow">
+      <span class="score-live">Score: <strong id="liveScore">0</strong></span>
+      <button class="primary-btn" id="nextBtn" style="display:none;">Next →</button>
+    </div>
+  </section>
+
+  <!-- RESULTS SCREEN -->
+  <section id="screen-results" class="screen">
+    <div class="card results-card">
+      <div class="result-emoji" id="resultEmoji">🎉</div>
+      <div class="scbig" id="scoreBig">0/0</div>
+      <div class="sclbl" id="scoreLabel"></div>
+
+      <div class="sgrid">
+        <div class="smet"><div class="snum" id="statAccuracy">0%</div><div class="slbl">Accuracy</div></div>
+        <div class="smet"><div class="snum" id="statCorrect">0</div><div class="slbl">Correct</div></div>
+        <div class="smet"><div class="snum" id="statMissed">0</div><div class="slbl">Missed</div></div>
+        <div class="smet"><div class="snum" id="statTotal">0</div><div class="slbl">Questions</div></div>
+      </div>
+
+      <div id="newHighscoreBanner" class="highscore-banner" style="display:none;">🌟 New high score for this topic!</div>
+
+      <div class="rbrow">
+        <button class="secondary-btn" id="retryBtn">Retry</button>
+        <button class="secondary-btn" id="reviewMissedBtn">Review missed</button>
+        <button class="primary-btn" id="homeBtn">Back to home</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSED QUESTIONS REVIEW SCREEN -->
+  <section id="screen-review" class="screen">
+    <div class="quiz-topbar">
+      <button class="icon-btn" id="reviewBackBtn" aria-label="Back to results" title="Back">←</button>
+      <h2 class="review-heading">Questions to review</h2>
+    </div>
+    <div id="reviewList" class="review-list"><!-- injected --></div>
+    <button class="primary-btn" id="reviewHomeBtn">Back to home</button>
+  </section>
+
+  <!-- FLASHCARD SCREEN -->
+  <section id="screen-flash" class="screen">
+    <div class="quiz-topbar">
+      <button class="icon-btn" id="flashQuitBtn" aria-label="Quit to home" title="Quit">✕</button>
+      <span class="topic-tag" id="flashTopicTag"></span>
+      <span class="quiz-progress" id="flashProgress"></span>
+    </div>
+
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-inner" id="flashcardInner">
+        <div class="flashcard-face flashcard-front" id="flashFront"></div>
+        <div class="flashcard-face flashcard-back" id="flashBack"></div>
+      </div>
+    </div>
+    <p class="flip-hint">Tap the card to flip</p>
+
+    <div class="navrow">
+      <button class="secondary-btn" id="flashPrev">← Prev</button>
+      <button class="secondary-btn" id="flashShuffleBtn">🔀 Shuffle</button>
+      <button class="secondary-btn" id="flashNext">Next →</button>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p>Polytechnic Institute of Tabaco &middot; 2026 BSIT Proficiency Exam Reviewer</p>
+    <p class="small">Made for review purposes. Good luck on your exam! 🍀</p>
+  </footer>
+
+</div>
+
+<script src="questions.js"></script>
+<script src="flashcards.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
