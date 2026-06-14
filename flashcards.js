@@ -1,5 +1,3 @@
-// BSIT Phase 2 Proficiency Exam Reviewer — Flashcards
-// Polytechnic Institute of Tabaco
 
 const FLASHCARDS = [
   { t: 'dsa', f: 'Time complexities:\nArray access, Linear Search, Binary Search', b: 'Array access: O(1)\nLinear Search best/worst: O(1) / O(n)\nBinary Search: O(log n)\nInsertion Sort best case: O(n)' },
